@@ -3,17 +3,18 @@ body {
   color: white;
   margin: 0;
   padding: 0;
-  background-image: url("./src/assets/bg.png");
+  background-image: url("/src/assets/bg.png");
   background-size: cover;
-  background-repeat: no-repeat;
 }
+
 header {
   display: flex;
   align-items: center;
   color: #fff;
   padding: 10px;
 }
-.search-bar{
+
+.search-bar {
   padding-left: 20px;
   margin-left: 10px;
   background-color: #c6c1bc;
@@ -27,13 +28,12 @@ header {
   display: flex;
 }
 
-.menu:not(.item){
+.menu {
   padding-left: 10px;
   padding-right: 10px;
   width: 1000px;
   color: black;
   background-color: white;
-  opacity: 70%;
 }
 
 .item {
@@ -42,6 +42,7 @@ header {
   display: flex;
   justify-content: space-between;
 }
+
 button {
   padding: 5px 10px;
   background-color: #333;
@@ -49,25 +50,29 @@ button {
   border: none;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #555;
 }
+
 .cart {
   position: absolute;
-  margin-left: 1100px;
-  margin-top: -185px;
+  right: 40px; /* Adjust the position as needed */
+  top: 100px; /* Adjust the position as needed */
   border: 1px solid #ccc;
   padding: 10px;
   width: 200px;
 }
+
 .checkout-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
   float: right;
 }
+
 .checkout-btn:hover {
   background-color: #45a049;
 }
