@@ -15,6 +15,10 @@ header {
   padding: 10px;
 }
 
+.logout-btn{
+  border-radius: 20%;
+}
+
 .search-bar {
   padding-left: 20px;
   margin-left: 10px;
