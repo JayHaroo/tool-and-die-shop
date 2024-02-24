@@ -63,14 +63,14 @@ body {
   
   .cart {
     position: absolute;
-    right: 40px; /* Adjust the position as needed */
-    top: 100px; /* Adjust the position as needed */
+    right: 40px; 
+    top: 100px; 
     border: 1px solid #ccc;
     padding: 10px;
     width: 200px;
     border-radius: 10px;
-    height: 200px; /* Set constant height */
-    overflow-y: auto; /* Enable vertical scrolling */
+    height: 400px; 
+    overflow-y: auto;
   }
   .cart ul {
     padding: 0;
