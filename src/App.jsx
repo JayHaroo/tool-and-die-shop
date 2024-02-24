@@ -53,7 +53,9 @@ function App() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         ></input>
+        <button type="button"> Logout </button>
       </header>
+
       <div className="container">
         <div className="menu">
           {filteredMenuItems.map((item) => (
@@ -64,6 +66,7 @@ function App() {
           ))}
         </div>
       </div>
+      
       <div className="cart">
         <h2>Shopping Cart</h2>
         <ul>
