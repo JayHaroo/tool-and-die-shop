@@ -3,11 +3,17 @@ import "./ordering.css"
 
 export default function Ordering(){
     const [cart, setCart] = useState([]);
+    /* Sample dummy items for menu*/
   const [menuItems, setMenuItems] = useState([
     { name: "Hammer", id: 1, quantity: 10, price: 15.99 },
     { name: "Screwdriver Set", id: 2, quantity: 20, price: 25.99 },
     { name: "Drill Bits", id: 3, quantity: 15, price: 10.99 },
     { name: "Wrench", id: 4, quantity: 12, price: 20.99 },
+    { name: "Pliers", id: 5, quantity: 18, price: 12.49 },
+    { name: "Tape Measure", id: 6, quantity: 25, price: 8.99 },
+    { name: "Utility Knife", id: 7, quantity: 14, price: 6.99 },
+    { name: "Adjustable Wrench", id: 8, quantity: 10, price: 16.99 },
+    { name: "Level", id: 9, quantity: 20, price: 14.99 },
   ]);
   const [newItemName, setNewItemName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +26,6 @@ export default function Ordering(){
       return menuItem;
     });
   
-    // Check if the item's quantity is greater than zero before adding it to the cart
     if (item.quantity > 0) {
       setCart([...cart, item]);
       setMenuItems(updatedMenuItems);
@@ -99,6 +104,16 @@ export default function Ordering(){
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className="payment">
+        <h3>Payment option</h3>
+        <input type="radio" id="cod" name="payment-method" checked="checked"></input>
+            <label for="cod">Cash On Delivery</label>
+            <br></br>
+        <input type="radio" id="card" name="payment-method"></input>
+            <label for="card">Credit Card on Delivery</label>
+
         <button className="checkout-btn" onClick={handleCheckout}>
           Checkout
         </button>
