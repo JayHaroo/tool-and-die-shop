@@ -68,7 +68,7 @@ export default function Ordering(){
   );
 
   return (
-    <>
+    <div className="body">
       <header>
         <h1>Tool and Die Shop</h1>
         <input
@@ -118,6 +118,6 @@ export default function Ordering(){
           Checkout
         </button>
       </div>
-    </>
+    </ div>
   );
 }
