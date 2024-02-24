@@ -19,9 +19,12 @@ function App() {
       }
       return menuItem;
     });
-
-    setCart([...cart, item]);
-    setMenuItems(updatedMenuItems);
+  
+    // Check if the item's quantity is greater than zero before adding it to the cart
+    if (item.quantity > 0) {
+      setCart([...cart, item]);
+      setMenuItems(updatedMenuItems);
+    }
   };
 
   const removeItemFromCart = (index) => {
