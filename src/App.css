@@ -34,6 +34,7 @@ header {
 }
 
 .menu {
+  border-radius: 10px;
   padding-left: 10px;
   padding-right: 10px;
   width: 1000px;
@@ -67,6 +68,17 @@ button:hover {
   border: 1px solid #ccc;
   padding: 10px;
   width: 200px;
+  border-radius: 10px;
+  height: 200px; /* Set constant height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+.cart ul {
+  padding: 0;
+  margin: 0;
+}
+
+.cart ul li {
+  list-style: none;
 }
 
 .checkout-btn {
@@ -75,7 +87,7 @@ button:hover {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  float: right;
+  width: 100%; /* Make button full width */
 }
 
 .checkout-btn:hover {
