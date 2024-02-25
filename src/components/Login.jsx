@@ -55,13 +55,14 @@
 
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     // Perform authentication logic here
@@ -105,7 +106,7 @@ const Login = () => {
           Login
         </button>
         {isLoggedIn ? ( 
-          <p>Click Here <Link to="/order">Redirect Here</Link></p>
+          navigate("/order")
         ) : (
           <p>Don't have an account? <Link to="/register">Register</Link></p>
         )}
