@@ -68,7 +68,7 @@ const Login = () => {
     // For demonstration, assume authentication is successful if username and password are 'admin'
     for (var i = 0; i < localStorage.length; i++){
         if(localStorage.key(i) == username && localStorage.getItem(localStorage.key(i)) == password){
-            alert("login successgul");
+            alert("login successful");
             setIsLoggedIn(true);
             callFunc = true;
             break;
@@ -104,9 +104,8 @@ const Login = () => {
         <button className='login-btn' type="button" onClick={handleLogin}>
           Login
         </button>
-        
-        {isLoggedIn ? (
-        <label> Welcome User Click Here to Redirect <Link to="/order">Redirect</Link></ label>
+        {isLoggedIn ? ( 
+          <p>Click Here <Link to="/order">Redirect Here</Link></p>
         ) : (
           <p>Don't have an account? <Link to="/register">Register</Link></p>
         )}
