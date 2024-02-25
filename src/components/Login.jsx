@@ -56,6 +56,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -79,35 +80,37 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className='login-form'>
       <form>
-        <label>
-          Username:
           <input
+          className='user-field'
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder='Username'
           />
-        </label>
         <br />
-        <label>
-          Password:
+    
           <input
+            className='pass-field'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
           />
-        </label>
+
         <br />
-        <button type="button" onClick={handleLogin}>
+
+        <button className='login-btn' type="button" onClick={handleLogin}>
           Login
         </button>
-      </form>
-      {isLoggedIn ? (
+        
+        {isLoggedIn ? (
         <label> Welcome User Click Here to Redirect <Link to="/order">Redirect</Link></ label>
-      ) : (
-        <p>Don't have an account? <Link to="/register">Register</Link></p>
-      )}
+        ) : (
+          <p>Don't have an account? <Link to="/register">Register</Link></p>
+        )}
+      </form>
     </div>
   );
 };

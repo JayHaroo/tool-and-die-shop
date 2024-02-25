@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Login.css'
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -15,34 +16,21 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className='reg-form'>
       <form>
-
-        <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </label>
+        <input className='user-field' placeholder='Username' type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         <br />
-
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+        <input className='pass-field' placeholder='Username' type="password" value={password} onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
+        <br />
+        <input className='con-pass-field' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
         <br />
 
-        <label>
-          Confirm Password:
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-        </label>
-        <br />
-
-        <button type="button" onClick={handleRegister}>
+        <button className='reg-btn' type="button" onClick={handleRegister}>
           Register
         </button>
+        <p>Already have an account? <Link to="/">Login</Link></p>
       </form>
-
-      <p>Already have an account? <Link to="/">Login</Link></p>
     </div>
   );
 };

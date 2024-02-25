@@ -1,3 +1,37 @@
-.body-class{
-    background-color: white;
+body{
+    background-image: url("/src/assets/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-form, .reg-form{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+    color: white;
+}
+.login-btn{
+    width: 90px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.user-field,.pass-field,.con-pass-field{
+    padding-left: 10px;
+    height: 30px;
+    width: 200px;
+    border-radius: 20px;
+}
+.pass-field{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.reg-btn{
+    margin-top: 5px;
+    width: 90px;
+    height: 40px;
+    border-radius: 10px;
 }
