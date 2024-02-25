@@ -11,6 +11,7 @@ const Register = () => {
     if(password != confirmPassword){
         alert("Password doesn't match");
     }else{
+        alert("Register Completed")
         localStorage.setItem(username, password);
     }
   };
@@ -20,7 +21,7 @@ const Register = () => {
       <form>
         <input className='user-field' placeholder='Username' type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         <br />
-        <input className='pass-field' placeholder='Username' type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+        <input className='pass-field' placeholder='password' type="password" value={password} onChange={(e) => setPassword(e.target.value)}
           />
         <br />
         <input className='con-pass-field' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
