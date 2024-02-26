@@ -1,24 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ordering.css"
+import  menuData from "./menu.json"
 
-export default function Ordering(){
-    const [cart, setCart] = useState([]);
-    /* Sample dummy items for menu*/
-  const [menuItems, setMenuItems] = useState([
-    { name: "Hammer", id: 1, quantity: 10, price: 15.99 },
-    { name: "Screwdriver Set", id: 2, quantity: 20, price: 25.99 },
-    { name: "Drill Bits", id: 3, quantity: 15, price: 10.99 },
-    { name: "Wrench", id: 4, quantity: 12, price: 20.99 },
-    { name: "Pliers", id: 5, quantity: 18, price: 12.49 },
-    { name: "Tape Measure", id: 6, quantity: 25, price: 8.99 },
-    { name: "Utility Knife", id: 7, quantity: 14, price: 6.99 },
-    { name: "Adjustable Wrench", id: 8, quantity: 10, price: 16.99 },
-    { name: "Level", id: 9, quantity: 20, price: 14.99 },
-  ]);
+export default function Ordering() {
+  const [cart, setCart] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
   const [newItemName, setNewItemName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    setMenuItems(menuData);
+  }, []);
+  
   const addItem = (item) => {
     const updatedMenuItems = menuItems.map((menuItem) => {
       if (menuItem.id === item.id && menuItem.quantity > 0) {
@@ -26,7 +20,7 @@ export default function Ordering(){
       }
       return menuItem;
     });
-  
+
     if (item.quantity > 0) {
       setCart([...cart, item]);
       setMenuItems(updatedMenuItems);
@@ -89,7 +83,7 @@ export default function Ordering(){
               <span>{item.name}</span>
               <span>Quantity: {item.quantity}</span>
               <span>Price: ${item.price}</span>
-              <button onClick={() => addItem(item)}><svg width="70px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21 5L19 12H7.37671M20 16H8L6 3H3M16 5.5H13.5M13.5 5.5H11M13.5 5.5V8M13.5 5.5V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button> {/* Pass item object */}
+              <button onClick={() => addItem(item)}>Add to Cart</button>
             </div>
           ))}
         </div>
@@ -110,15 +104,15 @@ export default function Ordering(){
       <div className="payment">
         <h3>Payment option</h3>
         <input type="radio" id="cod" name="payment-method" checked="checked"></input>
-            <label for="cod">Cash On Delivery</label>
-            <br></br>
+        <label htmlFor="cod">Cash On Delivery</label>
+        <br></br>
         <input type="radio" id="card" name="payment-method"></input>
-            <label for="card">Credit Card on Delivery</label>
-    
+        <label htmlFor="card">Credit Card on Delivery</label>
+
         <button className="checkout-btn" onClick={handleCheckout}>
           Checkout
         </button>
       </div>
-    </ div>
+    </div>
   );
 }
