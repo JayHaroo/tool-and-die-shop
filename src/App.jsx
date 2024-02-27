@@ -2,6 +2,7 @@ import React from "react";
 import Login from "./components/Login";
 import Ordering from "./components/ordering";
 import Register from "./components/Register";
+import Support from "./components/support";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/order",
     element: <Ordering />
+  },
+  {
+    path: "/support",
+    element: <Support />
   },
 ]);
 

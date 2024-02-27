@@ -1,0 +1,44 @@
+header{
+    font-size: 50px;
+}
+.con-container{
+    display: flex;
+    justify-content: center;
+}
+
+textarea{
+    font-size: 20px;
+    width: 900px;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+.detail-con{
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input{
+    height: 50px;
+    border-radius: 10px;
+}
+
+button{
+    border-radius: 10px;
+    height: 50px;
+    width: 80px;
+    color: black;
+    background-color: rgb(68, 255, 68);
+}
+
+button:hover{
+    color: rgb(253, 253, 253);
+    background-color: rgb(39, 163, 39);
+}
