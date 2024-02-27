@@ -11,16 +11,16 @@ const sendSupport = () =>{
 function Support(){
     return(
         <>
-        <header>Contact Customer Support</header>
+        <header className='sup-h'>Contact Customer Support</header>
         <div className="con-container">
             <form id='form'>
-                <textarea placeholder='Enter Concern'></textarea>
+                <textarea className='txt-area' placeholder='Enter Concern'></textarea>
             </form>
         </div>
 
         <div className="detail-con">
-            <input id='name' type="text" placeholder='Enter Sender Name'></input>
-            <button type='button' onClick={sendSupport}>Send</button>
+            <input className='inp' id='name' type="text" placeholder='Enter Sender Name'></input>
+            <button className='send-btn' type='button' onClick={sendSupport}>Send</button>
         </div>
         
         </>
