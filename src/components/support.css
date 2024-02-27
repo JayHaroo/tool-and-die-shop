@@ -31,7 +31,8 @@
     border-radius: 10px;
 }
 
-.send-btn{
+.send-btn,.back-btn{
+    margin: 10px;
     border-radius: 10px;
     height: 50px;
     width: 80px;
@@ -39,7 +40,7 @@
     background-color: rgb(68, 255, 68);
 }
 
-.send-btn:hover{
+.send-btn:hover , .back-btn:hover{
     color: rgb(253, 253, 253);
     background-color: rgb(39, 163, 39);
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import "./support.css"
 
 const sendSupport = () =>{
@@ -21,6 +22,7 @@ function Support(){
         <div className="detail-con">
             <input className='inp' id='name' type="text" placeholder='Enter Sender Name'></input>
             <button className='send-btn' type='button' onClick={sendSupport}>Send</button>
+            <Link to="/order"><button className='back-btn' type='button'>Exit</button></Link>
         </div>
         
         </>
