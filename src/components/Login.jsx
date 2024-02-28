@@ -25,37 +25,49 @@ const Login = () => {
   };
 
   return (
+    <><div className="head-text">
+      <h1 className='heading-text'>TOOL AND DIESHOP </h1>
+      <div className="login-text">LOGIN PAGE</div>
+    </div>
+    <div className="bot-text">
+      <div className="hello-text">Hello,</div>
+      <div className="wel-text">welcome!</div>
+    </div>
     <div className='login-form'>
-      <form>
+        <form>
           <input
-          className='user-field'
+            className='user-field'
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder='Username'
-          />
-        <br />
-    
+            placeholder='Username' />
+          <br />
+
           <input
             className='pass-field'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder='Password'
-          />
+            placeholder='Password' />
+          <br />
 
-        <br />
+          <div className="btn">
+            <button className='login-btn' type="button" onClick={handleLogin}>
+              Login
+            </button>
+            {isLoggedIn ? (
+              navigate("/order")
+            ) : (
+              <Link to="/register"><button className='signup-btn' type="button">
+                Sign Up
+              </button></Link>
+            )}
+          </div>
+        </form>
+        
+        <img className='iso-img' src="src\assets\iso-view.png" alt="iso-view" />
 
-        <button className='login-btn' type="button" onClick={handleLogin}>
-          Login
-        </button>
-        {isLoggedIn ? ( 
-          navigate("/order")
-        ) : (
-          <p>Don't have an account? <Link to="/register">Register</Link></p>
-        )}
-      </form>
-    </div>
+      </div></>
   );
 };
 
