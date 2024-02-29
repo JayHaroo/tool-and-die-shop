@@ -65,7 +65,7 @@ const Login = () => {
           </div>
         </form>
         
-        <img className='iso-img' src="public\iso-view.png" alt="iso-view" />
+        <img className='iso-img' src={"/public/iso-view.png"}  alt="iso-view" />
 
       </div></>
   );

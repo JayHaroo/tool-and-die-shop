@@ -38,7 +38,7 @@ const Register = () => {
           <p>Already have an account? <Link to="/">Login</Link></p>
         </form>
 
-        <img className='iso-img' src="public\iso-view.png" alt="iso-view" />
+        <img className='iso-img' src={"/public/iso-view.png"} alt="iso-view" />
 
       </div></>
   );
