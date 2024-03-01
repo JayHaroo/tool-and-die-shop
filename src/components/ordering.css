@@ -110,3 +110,31 @@
     height: 200px; 
     overflow-y: auto;
   }
+
+  .menu-container {
+    max-width: 1200px;
+    padding-left: 40px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .menu-item-box {
+    flex: 0 0 20%; /* Each item occupies 25% of the row width (4 items per row) */
+    padding: 10px;
+  }
+
+  .item{
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    flex-wrap: wrap;
+    height: 150px;
+    width: 170px;
+    background-color: white;
+  }

@@ -8,25 +8,28 @@ export default function Ordering() {
   const [menuItems, setMenuItems] = useState([]);
   const [newItemName, setNewItemName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   useEffect(() => {
     setMenuItems(menuData);
   }, []);
-  
+
   useEffect(() => {
     // Create or open IndexedDB database
     const openRequest = indexedDB.open("transactions_db", 1);
-    
-    openRequest.onerror = function(event) {
+
+    openRequest.onerror = function (event) {
       console.error("IndexedDB error:", event.target.errorCode);
     };
-    
-    openRequest.onupgradeneeded = function(event) {
+
+    openRequest.onupgradeneeded = function (event) {
       const db = event.target.result;
-      
+
       // Create object store for transactions
       if (!db.objectStoreNames.contains("transactions")) {
-        db.createObjectStore("transactions", { keyPath: "id", autoIncrement:true });
+        db.createObjectStore("transactions", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
       }
     };
   }, []);
@@ -71,61 +74,70 @@ export default function Ordering() {
       ...item,
       totalPrice: item.price * item.quantity,
     }));
-  
+
     // Calculate the overall total price
     const totalPrice = totalPricePerItem.reduce(
       (total, item) => total + item.totalPrice,
       0
     );
-  
+
     // Gather information about bought items, quantity, price, and mode of payment
     const boughtItems = totalPricePerItem.map((item) => {
       // Remove totalPrice property from each item
       const { totalPrice, ...rest } = item;
       return rest;
     });
-  
+
     // Open IndexedDB database
     const openRequest = indexedDB.open("transactions_db", 1);
-    
-    openRequest.onerror = function(event) {
+
+    openRequest.onerror = function (event) {
       console.error("IndexedDB error:", event.target.errorCode);
     };
-    
-    openRequest.onsuccess = function(event) {
+
+    openRequest.onsuccess = function (event) {
       const db = event.target.result;
-      
+
       // Add transaction to the object store
       const transaction = db.transaction(["transactions"], "readwrite");
       const objectStore = transaction.objectStore("transactions");
-      
+
       const newTransaction = {
         boughtItems: boughtItems,
         totalPrice: totalPrice,
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString(),
       };
-  
+
       const addRequest = objectStore.add(newTransaction);
-      
-      addRequest.onerror = function(event) {
-        console.error("Error adding transaction to IndexedDB:", event.target.error);
+
+      addRequest.onerror = function (event) {
+        console.error(
+          "Error adding transaction to IndexedDB:",
+          event.target.error
+        );
       };
-  
-      addRequest.onsuccess = function(event) {
+
+      addRequest.onsuccess = function (event) {
         console.log("Transaction added to IndexedDB successfully!");
       };
     };
-  
+
     // Alert and clear the cart
     alert(
       `Checkout Complete! Total Price: $${totalPrice}. Thank you for shopping with us.`
     );
     setCart([]);
   };
-  
+
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  function chunkArray(array, size) {
+    return Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
+      array.slice(index * size, index * size + size)
+    );
+  }
 
   return (
     <div className="body">
@@ -178,42 +190,46 @@ export default function Ordering() {
         </Link>
       </header>
 
-      <div className="container">
-        <div className="menu">
-          {filteredMenuItems.map((item) => (
-            <div className="item" key={item.id}>
-              <span>{item.name}</span>
-              <span>Quantity: {item.quantity}</span>
-              <span>Price: ${item.price}</span>
-              <button onClick={() => addItem(item)}>
-                <svg
-                  width="70px"
-                  height="20px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g
-                    id="SVGRepo_tracerCarrier"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></g>
-                  <g id="SVGRepo_iconCarrier">
-                    {" "}
-                    <path
-                      d="M21 5L19 12H7.37671M20 16H8L6 3H3M16 5.5H13.5M13.5 5.5H11M13.5 5.5V8M13.5 5.5V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
-                      stroke="#ffffff"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>{" "}
-                  </g>
-                </svg>
-              </button>
-            </div>
-          ))}
-        </div>
+      <div className="menu-container">
+        {chunkArray(filteredMenuItems, 4).map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((item) => (
+              <div className="menu-item-box" key={item.id}>
+                <div className="item">
+                  <span>{item.name}</span>
+                  <span>Quantity: {item.quantity}</span>
+                  <span>Price: ${item.price}</span>
+                  <button onClick={() => addItem(item)}>
+                    <svg
+                      width="70px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        {" "}
+                        <path
+                          d="M21 5L19 12H7.37671M20 16H8L6 3H3M16 5.5H13.5M13.5 5.5H11M13.5 5.5V8M13.5 5.5V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
+                          stroke="#ffffff"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></path>{" "}
+                      </g>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
 
       <div className="cart">
@@ -230,7 +246,12 @@ export default function Ordering() {
 
       <div className="payment">
         <h3>Payment option</h3>
-        <input type="radio" id="cod" name="payment-method" checked="checked"></input>
+        <input
+          type="radio"
+          id="cod"
+          name="payment-method"
+          checked="checked"
+        ></input>
         <label htmlFor="cod">Cash On Delivery</label>
         <br></br>
         <input type="radio" id="card" name="payment-method"></input>

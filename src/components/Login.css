@@ -99,3 +99,11 @@ body{
     width: 50%;
     height: auto;
 }
+
+.admin-btn{
+    background-color: rgb(12, 82, 12);
+    width: 130px;
+    height: 40px;
+    border-radius: 30px;
+}
+
