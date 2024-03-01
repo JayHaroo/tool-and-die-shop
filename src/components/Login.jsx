@@ -6,7 +6,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [adminLogin, setAdminLogin] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
