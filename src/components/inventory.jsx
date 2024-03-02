@@ -7,9 +7,39 @@ export default function Inventory() {
   const [menuItems, setMenuItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [updatedItems, setUpdatedItems] = useState([]);
+  const [totalSales, setTotalSales] = useState(0); // State to store total sales
 
   useEffect(() => {
     setMenuItems(menuData);
+  }, []);
+
+  useEffect(() => {
+    // Fetch total sales from IndexedDB
+    const openRequest = indexedDB.open("transactions_db", 1);
+
+    openRequest.onerror = function (event) {
+      console.error("IndexedDB error:", event.target.errorCode);
+    };
+
+    openRequest.onsuccess = function (event) {
+      const db = event.target.result;
+
+      const transaction = db.transaction(["transactions"], "readonly");
+      const objectStore = transaction.objectStore("transactions");
+
+      // Get all transactions
+      const getAllRequest = objectStore.getAll();
+
+      getAllRequest.onsuccess = function (event) {
+        const transactions = event.target.result;
+        // Calculate total sales
+        const total = transactions.reduce(
+          (acc, curr) => acc + curr.totalPrice,
+          0
+        );
+        setTotalSales(total);
+      };
+    };
   }, []);
 
   const toField = (menuItem) => {
@@ -72,7 +102,7 @@ export default function Inventory() {
           </button>
         </Link>
 
-        <Link to="/">
+        <Link to="/management">
           <button type="button" className="logout-inv">
             <svg
               width="70px"
@@ -155,6 +185,10 @@ export default function Inventory() {
             <button onClick={() => toField(menuItem)}>edit item</button>
           </div>
         ))}
+      </div>
+
+      <div className="sales">
+        <div>Total Sales: ${totalSales}</div>
       </div>
 
       {selectedItem && (

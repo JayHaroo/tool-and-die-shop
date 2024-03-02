@@ -22,12 +22,11 @@ header{
 }
 
 .edit-field{
+    padding-top: 30px;
     position: sticky;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding-left: 30px;
-    padding-top: 300px;
 }
 
 .item-name, 
@@ -36,4 +35,19 @@ header{
     padding-left: 10px;
     border-radius: 20px;
     height: 60px;
+}
+
+.sales{
+    margin-top: 10px;
+    margin-left: 30px;
+    display: flex;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    background-color: rgb(58, 212, 58);
+    width: 300px;
+    height: 200px;
 }

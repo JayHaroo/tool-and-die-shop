@@ -1,0 +1,61 @@
+.dashboard-container{
+    color: white;
+    margin: 20px;
+}
+
+.transaction-table {
+    background-color: white;
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #6e6e6e; /* Add border to the table */
+}
+
+.transaction-table th,
+.transaction-table td {
+    color: black;
+    border: 1px solid #6e6e6e;
+    padding: 8px;
+    text-align: left;
+}
+
+.transaction-table th {
+    background-color: #f2f2f2;
+}
+
+.transaction-row:hover {
+    background-color: #f2f2f2;
+}
+
+.date {
+    width: 20%;
+}
+
+.total-price {
+    width: 20%;
+}
+
+.employee {
+    width: 40%;
+}
+
+.employee-select {
+    width: 100%;
+}
+
+.action {
+    width: 20%;
+    text-align: center;
+}
+
+.confirm-btn {
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.confirm-btn:hover {
+    background-color: #45a049;
+}

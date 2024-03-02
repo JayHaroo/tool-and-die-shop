@@ -4,6 +4,7 @@ import Ordering from "./components/ordering";
 import Register from "./components/Register";
 import Support from "./components/support";
 import Inventory from "./components/inventory";
+import Management from "./components/management";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
     path: "/inventory",
     element: <Inventory />
   },
+  {
+    path: "/management",
+    element: <Management />
+  },
+
 ]);
 
 
