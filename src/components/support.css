@@ -1,46 +1,9 @@
-.sup-h{
-    font-size: 50px;
+.home-btn{ 
+    margin-left: 10px;
+    background-color: white;
+    border-radius: 100%;
 }
 
-.con-container{
-    display: flex;
-    justify-content: center;
-}
-
-.txt-area{
-    font-size: 20px;
-    width: 900px;
-    height: 150px;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f8f8;
-    resize: none;
-}
-
-.detail-con{
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.inp{
-    height: 50px;
-    border-radius: 10px;
-}
-
-.send-btn,.back-btn{
-    margin: 10px;
-    border-radius: 10px;
-    height: 50px;
-    width: 80px;
-    color: black;
-    background-color: rgb(68, 255, 68);
-}
-
-.send-btn:hover , .back-btn:hover{
-    color: rgb(253, 253, 253);
-    background-color: rgb(39, 163, 39);
+.btn-support{
+    padding: 10px;
 }
