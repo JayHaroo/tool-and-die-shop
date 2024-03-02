@@ -181,7 +181,7 @@ export default function Inventory() {
           <div className="menu" key={index}>
             <span>{menuItem.name}</span>
             <span>Quantity: {menuItem.quantity}</span>
-            <span>{menuItem.price}</span>
+            <span>{menuItem.price.toFixed(2)}</span>
             <button onClick={() => toField(menuItem)}>edit item</button>
           </div>
         ))}
