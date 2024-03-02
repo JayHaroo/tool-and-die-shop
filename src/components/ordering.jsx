@@ -142,7 +142,7 @@ export default function Ordering() {
   return (
     <div className="body">
       <header>
-        <img className="icon-head" src="src\assets\Icon.png" alt="icon" />
+        <img className="icon-head" src={"/Icon.png"} alt="icon" />
         <input
           className="search-bar"
           type="text"
