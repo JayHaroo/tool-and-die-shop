@@ -74,60 +74,69 @@ export default function Ordering() {
       ...item,
       totalPrice: item.price * item.quantity,
     }));
-
+  
     // Calculate the overall total price
     const totalPrice = totalPricePerItem.reduce(
       (total, item) => total + item.totalPrice,
       0
     );
-
+  
     // Gather information about bought items, quantity, price, and mode of payment
     const boughtItems = totalPricePerItem.map((item) => {
       // Remove totalPrice property from each item
       const { totalPrice, ...rest } = item;
       return rest;
     });
-
+  
+    // Get values from input fields
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const deliveryDate = document.getElementById("delivery-date").value;
+  
     // Open IndexedDB database
     const openRequest = indexedDB.open("transactions_db", 1);
-
+  
     openRequest.onerror = function (event) {
       console.error("IndexedDB error:", event.target.errorCode);
     };
-
+  
     openRequest.onsuccess = function (event) {
       const db = event.target.result;
-
+  
       // Add transaction to the object store
       const transaction = db.transaction(["transactions"], "readwrite");
       const objectStore = transaction.objectStore("transactions");
-
+  
       const newTransaction = {
+        name: name,
+        address: address,
+        deliveryDate: deliveryDate,
         boughtItems: boughtItems,
         totalPrice: totalPrice,
         date: new Date().toLocaleString(),
       };
-
+  
       const addRequest = objectStore.add(newTransaction);
-
+  
       addRequest.onerror = function (event) {
         console.error(
           "Error adding transaction to IndexedDB:",
           event.target.error
         );
       };
-
+  
       addRequest.onsuccess = function (event) {
         console.log("Transaction added to IndexedDB successfully!");
       };
     };
-
+  
     // Alert and clear the cart
     alert(
       `Checkout Complete! Total Price: $${totalPrice}. Thank you for shopping with us.`
     );
     setCart([]);
   };
+  
 
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -290,7 +299,7 @@ export default function Ordering() {
       </div>
 
       <div className="payment">
-        <h3>Payment option</h3>
+        <h3>Payment Method</h3>
         <input
           type="radio"
           id="cod"
@@ -301,6 +310,16 @@ export default function Ordering() {
         <br></br>
         <input type="radio" id="card" name="payment-method"></input>
         <label htmlFor="card">Credit Card on Delivery</label>
+
+        <div className="delivery-details">
+          <h3>Delivery Details</h3>
+          <label htmlFor="name">Name:</label>
+          <input type="text" id="name" name="name" />
+          <label htmlFor="address">Address:</label>
+          <input type="text" id="address" name="address" />
+          <label htmlFor="delivery-date">Delivery Date:</label>
+          <input type="date" id="delivery-date" name="delivery-date" />
+        </div>
       </div>
       <button className="checkout-btn" onClick={handleCheckout}>
         Checkout

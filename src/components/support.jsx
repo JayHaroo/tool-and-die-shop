@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./support.css";
 
 function Support() {
+  const [activeButton, setActiveButton] = useState("Account");
+  const [notifications, setNotifications] = useState([]);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+  const handleButtonClick = (buttonName) => {
+    setActiveButton(buttonName);
+  };
+
+  const renderMiddlePanel = () => {
+    switch (activeButton) {
+      case "Account":
+        return (
+          <div>
+            <div className="acc-text-det">Manage Account Details</div>
+          </div>
+        );
+      case "Orders":
+        return <div>Orders Panel Content</div>;
+      case "Inbox":
+        return <div>Inbox Panel Content</div>;
+      case "Help Center":
+        return <div>Help Center Panel Content</div>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <div className="btn-support">
@@ -61,6 +94,73 @@ function Support() {
             </svg>
           </button>
         </Link>
+      </div>
+
+      <div className="container">
+        <div className="left-panel">
+          <svg
+            className="icon-prof"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="#000000"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              {" "}
+              <path
+                opacity="0.5"
+                d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                fill="#000000"
+              ></path>{" "}
+              <path
+                d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
+                fill="#000000"
+              ></path>{" "}
+              <path
+                d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
+                fill="#000000"
+              ></path>{" "}
+            </g>
+          </svg>
+          <div className="sup-btn">
+            <div className="name"> {username} </div>
+            <button
+              className="acc-btn"
+              onClick={() => handleButtonClick("Account")}
+            >
+              Account
+            </button>
+            <button
+              className="ord-btn"
+              onClick={() => handleButtonClick("Orders")}
+            >
+              Orders
+            </button>
+            <button
+              className="inb-btn"
+              onClick={() => handleButtonClick("Inbox")}
+            >
+              Inbox
+            </button>
+            <button
+              className="help-btn"
+              onClick={() => handleButtonClick("Help Center")}
+            >
+              Help Center
+            </button>
+          </div>
+        </div>
+        <div className="middle-panel">{renderMiddlePanel()}</div>
+        <div className="right-panel">
+          <h1>Notifications</h1>
+          <div className="l2"></div>
+        </div>
       </div>
     </>
   );

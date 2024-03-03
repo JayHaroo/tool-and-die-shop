@@ -1,9 +1,87 @@
-.home-btn{ 
-    margin-left: 10px;
-    background-color: white;
-    border-radius: 100%;
+.home-btn {
+  margin-left: 10px;
+  background-color: white;
+  border-radius: 100%;
 }
 
-.btn-support{
-    padding: 10px;
+.btn-support {
+  padding: 10px;
+}
+
+.left-panel {
+  margin-right: 20px;
+  border-radius: 30px;
+  background-color: white;
+  width: 300px;
+  height: 530px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sup-btn {
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+}
+
+.acc-btn,
+.ord-btn,
+.inb-btn,
+.help-btn {
+  border-radius: 50px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.acc-btn {
+  background-color: rgb(115, 115, 187);
+}
+
+.ord-btn {
+  background-color: rgb(21, 145, 76);
+}
+
+.inb-btn {
+  background-color: rgb(18, 2, 163);
+}
+
+.help-btn {
+  background-color: rgb(194, 54, 30);
+}
+
+.middle-panel {
+  margin-right: 20px;
+  border-radius: 30px;
+  background-color: white;
+  width: 700px;
+  height: 530px;
+}
+
+.right-panel {
+  padding-left: 10px;
+  border-radius: 30px;
+  background-color: white;
+  width: 300px;
+  height: 530px;
+}
+
+.name{
+  padding-bottom: 30px;
+}
+
+.acc-text-det{
+  padding-top: 10px;
+  padding-left: 30px;
+}
+
+.l2{
+  border-bottom: 2px solid black;
+  width: 250px;
+}
+
+.icon-prof{
+  width: 200px;
 }

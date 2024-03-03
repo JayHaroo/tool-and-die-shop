@@ -1,4 +1,3 @@
-/// Import necessary libraries
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import employeesData from "./employees.json";
@@ -34,13 +33,13 @@ export default function Management() {
     const transactionToConfirm = transactions.find(
       (transaction) => transaction.id === transactionId
     );
-
+  
     // Store confirmed delivery in a new IndexedDB
     const openRequest = indexedDB.open("deliveries_db", 1);
-
+  
     openRequest.onupgradeneeded = function (event) {
       const db = event.target.result;
-
+  
       // Create object store for deliveries
       if (!db.objectStoreNames.contains("deliveries")) {
         db.createObjectStore("deliveries", {
@@ -49,33 +48,36 @@ export default function Management() {
         });
       }
     };
-
+  
     openRequest.onsuccess = function (event) {
       const db = event.target.result;
       const transaction = db.transaction(["deliveries"], "readwrite");
       const objectStore = transaction.objectStore("deliveries");
-
+  
       // Add confirmed delivery to the object store
       const addRequest = objectStore.add({
         ...transactionToConfirm,
         employee: selectedEmployee,
-        deliveryDate: new Date().toLocaleString(),
+        deliveryDate: transactionToConfirm.deliveryDate, // Use the delivery date from the transaction object
+        datePlaced: new Date().toLocaleString(), // Store the date placed for confirmed delivery
       });
-
+  
       addRequest.onsuccess = function () {
         // Remove confirmed transaction from transactions
         const updatedTransactions = transactions.filter(
           (transaction) => transaction.id !== transactionToConfirm.id
         );
         setTransactions(updatedTransactions);
-
+      
         // Update confirmed deliveries state
         setConfirmedDeliveries((prevDeliveries) => [
           ...prevDeliveries,
           {
             ...transactionToConfirm,
+            items: transactionToConfirm.boughtItems.map(item => item.name), // Map over each item in boughtItems array to extract name
             employee: selectedEmployee,
-            deliveryDate: new Date().toLocaleString(),
+            deliveryDate: transactionToConfirm.deliveryDate, // Use the delivery date from the transaction object
+            datePlaced: new Date().toLocaleString(), // Store the date placed for confirmed delivery
           },
         ]);
       };
@@ -85,58 +87,61 @@ export default function Management() {
   return (
     <div className="dashboard-container">
       <div className="header-man">
-      <div className="element-man">
-        <img className="icon-inv" src={"/Icon.png"} alt="icon" />
-        <div className="l1"></div>
-      </div>
-      <div className="head-man">
-        <h1 className="h1-man">Order Management Dashboard</h1>
-        <Link to="/Inventory">
-          <button type="button" className="logout-man">
-            <svg
-              width="40px"
-              height="40px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  d="M14 7.63636L14 4.5C14 4.22386 13.7761 4 13.5 4L4.5 4C4.22386 4 4 4.22386 4 4.5L4 19.5C4 19.7761 4.22386 20 4.5 20L13.5 20C13.7761 20 14 19.7761 14 19.5L14 16.3636"
-                  stroke="#000000"
-                  stroke-width="2"
+        <div className="element-man">
+          <img className="icon-inv" src={"/Icon.png"} alt="icon" />
+          <div className="l1"></div>
+        </div>
+        <div className="head-man">
+          <h1 className="h1-man">Order Management Dashboard</h1>
+          <Link to="/Inventory">
+            <button type="button" className="logout-man">
+              <svg
+                width="40px"
+                height="40px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                ></path>{" "}
-                <path
-                  d="M10 12L21 12M21 12L18.0004 8.5M21 12L18 15.5"
-                  stroke="#000000"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>{" "}
-              </g>
-            </svg>
-          </button>
-        </Link>
-      </div>
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <path
+                    d="M14 7.63636L14 4.5C14 4.22386 13.7761 4 13.5 4L4.5 4C4.22386 4 4 4.22386 4 4.5L4 19.5C4 19.7761 4.22386 20 4.5 20L13.5 20C13.7761 20 14 19.7761 14 19.5L14 16.3636"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>{" "}
+                  <path
+                    d="M10 12L21 12M21 12L18.0004 8.5M21 12L18 15.5"
+                    stroke="#000000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>{" "}
+                </g>
+              </svg>
+            </button>
+          </Link>
+        </div>
       </div>
       <div>
-        <h2>Transactions</h2>
+        <h2>Job Available</h2>
         <table className="transaction-table">
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Materials</th>
+              <th>Job Number</th>
+              <th>Name</th>
+              <th>Delivery Date</th>
+              <th>Address</th>
+              <th>Materials to Deliver</th>
               <th>Total Price</th>
-              <th>Date</th>
+              <th>Date Placed</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -145,6 +150,13 @@ export default function Management() {
               <tr key={transaction.id}>
                 <td>{transaction.id}</td>
                 <td>{transaction.name}</td>
+                <td>{transaction.deliveryDate}</td>
+                <td>{transaction.address}</td>
+                <td>
+                  {transaction.boughtItems.map((item, index) => (
+                    <span key={index}>{item.name}, </span>
+                  ))}
+                </td>
                 <td>${transaction.totalPrice.toFixed(2)}</td>
                 <td>{transaction.date}</td>
                 <td>
@@ -171,11 +183,13 @@ export default function Management() {
           <thead>
             <tr>
               <th>Order ID</th>
+              <th>Name</th>
+              <th>Delivery Date</th>
+              <th>Address</th>
               <th>Material</th>
               <th>Total Price</th>
-              <th>Date</th>
               <th>Employee</th>
-              <th>Delivery Date</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -183,10 +197,12 @@ export default function Management() {
               <tr key={delivery.id}>
                 <td>{delivery.id}</td>
                 <td>{delivery.name}</td>
-                <td>${delivery.totalPrice.toFixed(2)}</td>
-                <td>{delivery.date}</td>
-                <td>{delivery.employee}</td>
                 <td>{delivery.deliveryDate}</td>
+                <td>{delivery.address}</td>
+                <td>{delivery.items.join(", ")}</td>
+                <td>${delivery.totalPrice.toFixed(2)}</td>
+                <td>{delivery.employee}</td>
+                <td><button> Click to complete Delivery</button></td>
               </tr>
             ))}
           </tbody>

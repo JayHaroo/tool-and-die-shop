@@ -18,6 +18,10 @@
     text-align: left;
 }
 
+td{
+    color: black;
+}
+
 .transaction-table th {
     background-color: #f2f2f2;
 }
@@ -77,4 +81,8 @@
     margin-left: 40px;
     align-items: center;
     display: flex;
+}
+
+.fe{
+    font-size: 100px;
 }

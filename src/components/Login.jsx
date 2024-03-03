@@ -22,6 +22,7 @@ const Login = () => {
         localStorage.key(i) == username &&
         localStorage.getItem(localStorage.key(i)) == password
       ) {
+        localStorage.setItem('username', username)
         alert("login successful");
         setIsLoggedIn(true);
         setAdminLogin = true; // Set isAdminLogin to true if username and password are 'admin'
