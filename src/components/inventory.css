@@ -2,10 +2,28 @@ header{
     color: white;
 }
 
+.icon-inv{
+    margin-left: -60px;
+    width: 10%;
+    height: auto;
+}
+
+.l1{
+    border-left: 3px solid rgb(255, 255, 255);
+    height: 70px;
+}
+
 .logout-inv{
-    border-radius: 20px;
-    height: 60px;
-    width: 100px;
+    margin-top: 10px;
+    margin-left: 850px;
+    background-color: white;
+    border-radius: 50px;
+}
+
+.man-inv{
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 50px;
 }
 
 .menu{
@@ -22,32 +40,38 @@ header{
 }
 
 .edit-field{
-    padding-top: 30px;
+    padding-top: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.add-field{
+    margin-top: -15px;
+    margin-bottom: 10px;
     position: sticky;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-.item-name, 
+.item-name{
+    padding-left: 10px;
+    border-radius: 20px;
+    height: 40px;
+    width: 700px;
+} 
 .item-quantity,
 .item-price{
     padding-left: 10px;
     border-radius: 20px;
-    height: 60px;
+    height: 40px;
 }
 
-.sales{
-    margin-top: 10px;
-    margin-left: 30px;
-    display: flex;
-    border-radius: 50px;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 30px;
+.save-btn2{
+    color: black;
+    width: 100px;
+    height: 40px;
     background-color: rgb(58, 212, 58);
-    width: 300px;
-    height: 200px;
+    border-radius: 50px;
 }

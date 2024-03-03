@@ -163,3 +163,8 @@ button:hover {
   width: 10%;
   height: auto;
 }
+
+.save-btn{
+  border-radius: 50px;
+  background-color: rgb(182, 29, 29);
+}

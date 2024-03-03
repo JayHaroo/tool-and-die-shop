@@ -59,3 +59,22 @@
 .confirm-btn:hover {
     background-color: #45a049;
 }
+
+.logout-man{
+    background-color: white;
+    border-radius: 50px;
+}
+
+.head-man{
+    margin-top: -100px;
+    margin-left: 120px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+}
+
+.element-man{
+    margin-left: 40px;
+    align-items: center;
+    display: flex;
+}
