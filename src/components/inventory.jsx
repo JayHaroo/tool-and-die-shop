@@ -14,34 +14,53 @@ export default function Inventory() {
   }, []);
 
   useEffect(() => {
-    // Fetch total sales from IndexedDB
-    const openRequest = indexedDB.open("transactions_db", 1);
-
-    openRequest.onerror = function (event) {
-      console.error("IndexedDB error:", event.target.errorCode);
-    };
-
-    openRequest.onsuccess = function (event) {
+    const openRequest = indexedDB.open("inventory_db", 1);
+  
+    openRequest.onupgradeneeded = function(event) {
       const db = event.target.result;
-
-      const transaction = db.transaction(["transactions"], "readonly");
-      const objectStore = transaction.objectStore("transactions");
-
-      // Get all transactions
-      const getAllRequest = objectStore.getAll();
-
-      getAllRequest.onsuccess = function (event) {
-        const transactions = event.target.result;
-        // Calculate total sales
-        const total = transactions.reduce(
-          (acc, curr) => acc + curr.totalPrice,
-          0
-        );
-        setTotalSales(total);
-      };
+      db.createObjectStore("items", { keyPath: "id", autoIncrement: true });
+    };
+  
+    openRequest.onsuccess = function(event) {
+      console.log("Database opened successfully");
+    };
+  
+    openRequest.onerror = function(event) {
+      console.error("IndexedDB error:", event.target.errorCode);
     };
   }, []);
 
+  const addItemToDatabase = () => {
+    const name = document.querySelector('.item-name').value;
+    const quantity = parseInt(document.querySelector('.item-quantity').value);
+    const price = parseFloat(document.querySelector('.item-price').value);
+
+    const newItem = {
+      name: name,
+      quantity: quantity,
+      price: price
+    };
+
+    const openRequest = indexedDB.open("inventory_db", 1);
+
+    openRequest.onsuccess = function(event) {
+      const db = event.target.result;
+      const transaction = db.transaction(["items"], "readwrite");
+      const objectStore = transaction.objectStore("items");
+      const addItemRequest = objectStore.add(newItem);
+
+      addItemRequest.onsuccess = function(event) {
+        console.log("Item added successfully");
+        setMenuItems([...menuItems, { ...newItem, id: event.target.result }]);
+      };
+
+      addItemRequest.onerror = function(event) {
+        console.error("Failed to add item:", event.target.error);
+      };
+    };
+  };
+  
+  
   const toField = (menuItem) => {
     setSelectedItem(menuItem);
   };
@@ -61,6 +80,43 @@ export default function Inventory() {
     setUpdatedItems([...updatedItems, selectedItem]); // For demonstration purposes, keeping track of updated items
     setSelectedItem(null); // Reset selected item after saving
   };
+
+  const handleSaveNew = () => {
+    const name = document.querySelector('.item-name').value;
+    const quantity = parseInt(document.querySelector('.item-quantity').value);
+    const price = parseFloat(document.querySelector('.item-price').value);
+  
+    const newItem = {
+      name: name,
+      quantity: quantity,
+      price: price
+    };
+  
+    const openRequest = indexedDB.open("transactions_db", 1);
+  
+    openRequest.onerror = function (event) {
+      console.error("IndexedDB error:", event.target.errorCode);
+    };
+  
+    openRequest.onsuccess = function (event) {
+      const db = event.target.result;
+      const transaction = db.transaction(["added_items"], "readwrite");
+      const objectStore = transaction.objectStore("added_items");
+      const addItemRequest = objectStore.add(newItem);
+  
+      addItemRequest.onerror = function (event) {
+        console.error("Error adding item:", event.target.error);
+      };
+  
+      addItemRequest.onsuccess = function (event) {
+        console.log("Item added successfully");
+        const newItemWithId = { ...newItem, id: event.target.result };
+        // Update state to include the new item
+        setMenuItems([...menuItems, newItemWithId]);
+      };
+    };
+  };
+  
 
   return (
     <>
@@ -187,16 +243,16 @@ export default function Inventory() {
         <input
           className="item-quantity"
           placeholder="Quantity"
-          type="text"
-
+          type="number"
         />
         <input
           className="item-price"
           placeholder="Price"
-          type="text"
+          type="number"
+          step="0.01"
         />
-        <button className="save-btn2">
-            save
+        <button className="save-btn2" onClick={addItemToDatabase}>
+            Save
         </button>
       </div>
 
@@ -206,11 +262,11 @@ export default function Inventory() {
             <span>{menuItem.name}</span>
             <span>Quantity: {menuItem.quantity}</span>
             <span>{menuItem.price.toFixed(2)}</span>
-            <button onClick={() => toField(menuItem)}>edit item</button>
+            <button onClick={() => toField(menuItem)}>Edit item</button>
           </div>
         ))}
-       
       </div>
+      
       {selectedItem && (
         <div className="edit-field">
           <input
@@ -224,7 +280,7 @@ export default function Inventory() {
           <input
             className="item-quantity"
             placeholder="Quantity"
-            type="text"
+            type="number"
             name="quantity"
             value={selectedItem.quantity}
             onChange={handleInputChange}
@@ -232,37 +288,16 @@ export default function Inventory() {
           <input
             className="item-price"
             placeholder="Price"
-            type="text"
+            type="number"
+            step="0.01"
             name="price"
             value={selectedItem.price}
             onChange={handleInputChange}
           />
           <button className="save-btn" onClick={handleSave}>
-            <svg
-              width="70px"
-              height="50px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M18.1716 1C18.702 1 19.2107 1.21071 19.5858 1.58579L22.4142 4.41421C22.7893 4.78929 23 5.29799 23 5.82843V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H18.1716ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21L5 21L5 15C5 13.3431 6.34315 12 8 12L16 12C17.6569 12 19 13.3431 19 15V21H20C20.5523 21 21 20.5523 21 20V6.82843C21 6.29799 20.7893 5.78929 20.4142 5.41421L18.5858 3.58579C18.2107 3.21071 17.702 3 17.1716 3H17V5C17 6.65685 15.6569 8 14 8H10C8.34315 8 7 6.65685 7 5V3H4ZM17 21V15C17 14.4477 16.5523 14 16 14L8 14C7.44772 14 7 14.4477 7 15L7 21L17 21ZM9 3H15V5C15 5.55228 14.5523 6 14 6H10C9.44772 6 9 5.55228 9 5V3Z"
-                  fill="#ffffff"
-                ></path>{" "}
-              </g>
-            </svg>
+            Save Changes
           </button>
-        </div>
+          </div>
       )}
     </>
   );

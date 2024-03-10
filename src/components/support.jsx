@@ -26,11 +26,17 @@ function Support() {
           </div>
         );
       case "Orders":
-        return <div>Orders Panel Content</div>;
+        return (
+          <div className="ord-text-det">Orders Panel Content</div>
+        );
       case "Inbox":
-        return <div>Inbox Panel Content</div>;
+        return (
+          <div className="inb-text-det">Inbox Panel Content</div>
+        );
       case "Help Center":
-        return <div>Help Center Panel Content</div>;
+        return (
+          <div className="help-text-det">Help Panel Content</div>
+        );
       default:
         return null;
     }
@@ -96,7 +102,7 @@ function Support() {
         </Link>
       </div>
 
-      <div className="container">
+      <div className="container-2">
         <div className="left-panel">
           <svg
             className="icon-prof"

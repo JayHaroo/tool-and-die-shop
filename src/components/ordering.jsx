@@ -8,29 +8,47 @@ export default function Ordering() {
   const [menuItems, setMenuItems] = useState([]);
   const [newItemName, setNewItemName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [inventoryItems, setInventoryItems] = useState([]);
+  
 
   useEffect(() => {
+    // Fetch menu items from menu.json
     setMenuItems(menuData);
-  }, []);
 
-  useEffect(() => {
-    // Create or open IndexedDB database
-    const openRequest = indexedDB.open("transactions_db", 1);
+    // Create or open IndexedDB database for inventory
+    const openRequestInventory = indexedDB.open("inventory_db", 1);
 
-    openRequest.onerror = function (event) {
+    openRequestInventory.onerror = function (event) {
       console.error("IndexedDB error:", event.target.errorCode);
     };
 
-    openRequest.onupgradeneeded = function (event) {
+    openRequestInventory.onupgradeneeded = function (event) {
       const db = event.target.result;
 
-      // Create object store for transactions
-      if (!db.objectStoreNames.contains("transactions")) {
-        db.createObjectStore("transactions", {
+      // Create object store for inventory items
+      if (!db.objectStoreNames.contains("items")) {
+        db.createObjectStore("items", {
           keyPath: "id",
           autoIncrement: true,
         });
       }
+    };
+
+    openRequestInventory.onsuccess = function (event) {
+      const db = event.target.result;
+
+      // Fetch inventory items from the object store
+      const transaction = db.transaction(["items"], "readonly");
+      const objectStore = transaction.objectStore("items");
+      const getRequest = objectStore.getAll();
+
+      getRequest.onsuccess = function (event) {
+        setInventoryItems(event.target.result);
+      };
+
+      getRequest.onerror = function (event) {
+        console.error("Error fetching inventory items:", event.target.error);
+      };
     };
   }, []);
 
@@ -74,39 +92,39 @@ export default function Ordering() {
       ...item,
       totalPrice: item.price * item.quantity,
     }));
-  
+
     // Calculate the overall total price
     const totalPrice = totalPricePerItem.reduce(
       (total, item) => total + item.totalPrice,
       0
     );
-  
+
     // Gather information about bought items, quantity, price, and mode of payment
     const boughtItems = totalPricePerItem.map((item) => {
       // Remove totalPrice property from each item
       const { totalPrice, ...rest } = item;
       return rest;
     });
-  
+
     // Get values from input fields
     const name = document.getElementById("name").value;
     const address = document.getElementById("address").value;
     const deliveryDate = document.getElementById("delivery-date").value;
-  
+
     // Open IndexedDB database
     const openRequest = indexedDB.open("transactions_db", 1);
-  
+
     openRequest.onerror = function (event) {
       console.error("IndexedDB error:", event.target.errorCode);
     };
-  
+
     openRequest.onsuccess = function (event) {
       const db = event.target.result;
-  
+
       // Add transaction to the object store
       const transaction = db.transaction(["transactions"], "readwrite");
       const objectStore = transaction.objectStore("transactions");
-  
+
       const newTransaction = {
         name: name,
         address: address,
@@ -115,28 +133,27 @@ export default function Ordering() {
         totalPrice: totalPrice,
         date: new Date().toLocaleString(),
       };
-  
+
       const addRequest = objectStore.add(newTransaction);
-  
+
       addRequest.onerror = function (event) {
         console.error(
           "Error adding transaction to IndexedDB:",
           event.target.error
         );
       };
-  
+
       addRequest.onsuccess = function (event) {
         console.log("Transaction added to IndexedDB successfully!");
       };
     };
-  
+
     // Alert and clear the cart
     alert(
       `Checkout Complete! Total Price: $${totalPrice}. Thank you for shopping with us.`
     );
     setCart([]);
   };
-  
 
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -223,67 +240,67 @@ export default function Ordering() {
       </header>
 
       <div className="menu-container">
-        {chunkArray(filteredMenuItems, 4).map((row, rowIndex) => (
-          <div className="row" key={rowIndex}>
-            {row.map((item) => (
-              <div className="menu-item-box" key={item.id}>
-                <div className="item">
-                  <span>
-                    <svg
-                      fill="#000000"
-                      width="64px"
-                      height="64px"
-                      viewBox="0 0 32 32"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                      <g
-                        id="SVGRepo_tracerCarrier"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></g>
-                      <g id="SVGRepo_iconCarrier">
-                        {" "}
-                        <title>tools</title>{" "}
-                        <path d="M27.783 7.936c0.959 2.313 0.502 5.074-1.379 6.955-2.071 2.071-5.201 2.395-7.634 1.022l-1.759 1.921 1.255 1.26 0.75-0.75c0.383-0.384 1.005-0.384 1.388 0l6.082 6.144c0.384 0.383 0.384 1.005 0 1.388l-2.776 2.776c-0.383 0.384-1.005 0.384-1.388 0l-6.082-6.144c-0.384-0.383-0.384-1.005 0-1.388l0.685-0.685-1.196-1.199-8.411 9.189c-0.767 0.767-2.010 0.767-2.776 0l-0.694-0.694c-0.767-0.767-0.767-2.010 0-2.776l9.582-8.025-6.364-6.381-2.010-0.001-2.326-3.74 1.872-1.875 3.825 2.341 0.025 1.968 6.438 6.463 1.873-1.568c-1.831-2.496-1.64-6.012 0.616-8.268 1.872-1.872 4.618-2.337 6.925-1.396l-4.124 4.067 3.471 3.471 4.132-4.075zM6.15 25.934c-0.383-0.383-1.004-0.383-1.388 0-0.384 0.384-0.384 1.005 0 1.389 0.384 0.383 1.005 0.383 1.388 0 0.384-0.385 0.384-1.006 0-1.389z"></path>{" "}
-                      </g>
-                    </svg>
-                  </span>
-                  <span>{item.name}</span>
-                  <span>Quantity: {item.quantity}</span>
-                  <span>Price: ${item.price}</span>
-                  <button onClick={() => addItem(item)}>
-                    <svg
-                      width="70px"
-                      height="20px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                      <g
-                        id="SVGRepo_tracerCarrier"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></g>
-                      <g id="SVGRepo_iconCarrier">
-                        {" "}
-                        <path
-                          d="M21 5L19 12H7.37671M20 16H8L6 3H3M16 5.5H13.5M13.5 5.5H11M13.5 5.5V8M13.5 5.5V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
-                          stroke="#ffffff"
-                          stroke-width="2"
+        {chunkArray([...filteredMenuItems, ...inventoryItems], 4).map(
+          (row, rowIndex) => (
+            <div className="row" key={rowIndex}>
+              {row.map((item) => (
+                <div className="menu-item-box" key={item.id}>
+                  <div className="item">
+                    <span>
+                      <svg
+                        fill="#000000"
+                        width="64px"
+                        height="64px"
+                        viewBox="0 0 32 32"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                        ></path>{" "}
-                      </g>
-                    </svg>
-                  </button>
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <title>tools</title>
+                          <path d="M27.783 7.936c0.959 2.313 0.502 5.074-1.379 6.955-2.071 2.071-5.201 2.395-7.634 1.022l-1.759 1.921 1.255 1.26 0.75-0.75c0.383-0.384 1.005-0.384 1.388 0l6.082 6.144c0.384 0.383 0.384 1.005 0 1.388l-2.776 2.776c-0.383 0.384-1.005 0.384-1.388 0l-6.082-6.144c-0.384-0.383-0.384-1.005 0-1.388l0.685-0.685-1.196-1.199-8.411 9.189c-0.767 0.767-2.010 0.767-2.776 0l-0.694-0.694c-0.767-0.767-0.767-2.010 0-2.776l9.582-8.025-6.364-6.381-2.010-0.001-2.326-3.74 1.872-1.875 3.825 2.341 0.025 1.968 6.438 6.463 1.873-1.568c-1.831-2.496-1.64-6.012 0.616-8.268 1.872-1.872 4.618-2.337 6.925-1.396l-4.124 4.067 3.471 3.471 4.132-4.075zM6.15 25.934c-0.383-0.383-1.004-0.383-1.388 0-0.384 0.384-0.384 1.005 0 1.389 0.384 0.383 1.005 0.383 1.388 0 0.384-0.385 0.384-1.006 0-1.389z"></path>
+                        </g>
+                      </svg>
+                    </span>
+                    <span>{item.name}</span>
+                    <span>Quantity: {item.quantity}</span>
+                    <span>Price: ${item.price}</span>
+                    <button onClick={() => addItem(item)}>
+                      <svg
+                        width="70px"
+                        height="20px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <path
+                            d="M21 5L19 12H7.37671M20 16H8L6 3H3M16 5.5H13.5M13.5 5.5H11M13.5 5.5V8M13.5 5.5V3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
+                            stroke="#ffffff"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </g>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ))}
+              ))}
+            </div>
+          )
+        )}
       </div>
 
       <div className="cart">

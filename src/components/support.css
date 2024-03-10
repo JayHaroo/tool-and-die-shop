@@ -72,7 +72,7 @@
   padding-bottom: 30px;
 }
 
-.acc-text-det{
+.acc-text-det, .ord-text-det, .inb-text-det, .help-text-det{
   padding-top: 10px;
   padding-left: 30px;
 }
@@ -84,4 +84,8 @@
 
 .icon-prof{
   width: 200px;
+}
+
+.container-2{
+  display: flex;
 }
