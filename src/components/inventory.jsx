@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./CSS/inventory.css";
 import { Link } from "react-router-dom";
-import menuData from "./menu.json";
+import menuData from "./JSON/menu.json";
 
 export default function Inventory() {
   const [menuItems, setMenuItems] = useState([]);

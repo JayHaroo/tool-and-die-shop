@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./CSS/ordering.css";
-import menuData from "./menu.json";
+import menuData from "./JSON/menu.json";
 
 export default function Ordering() {
   const [cart, setCart] = useState([]);

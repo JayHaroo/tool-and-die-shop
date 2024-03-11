@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import employeesData from "./employees.json";
+import employeesData from "./JSON/employees.json";
 import "./CSS/management.css";
 
 export default function Management() {
