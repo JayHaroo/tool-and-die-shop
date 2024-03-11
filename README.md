@@ -1,3 +1,10 @@
+# Group 6
+submitted by:
+Duhaylungsod, Kyziah Mae S.
+Garcia, John Charles T.
+Guevarra, Shane Ashley M.
+Saturno, M-Jey L.
+
 # A Prelim Case Study for Software Engineering 1
 The manager of a Tool and Die Shop needs help with job processing and control. Jobs are currently
 processed by hand. First, a job number is established. Next, the job supervisor estimates the time and
