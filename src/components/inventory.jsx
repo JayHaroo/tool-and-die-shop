@@ -1,3 +1,18 @@
+/*
+  Case Study #1
+  Submitted By:
+  Duhaylungsod, Kyziah Mae S. 
+  Garcia, John Charles T. 
+  Guevarra, Shane Ashley M. 
+  Saturno, M-Jey L.
+
+  The Other Souce Codes has File Extension in .jsx 
+
+  Working deployment site:
+  https://tool-and-die-shop.vercel.app/
+  
+*/
+
 import React, { useEffect, useState } from "react";
 import "./CSS/inventory.css";
 import { Link } from "react-router-dom";
