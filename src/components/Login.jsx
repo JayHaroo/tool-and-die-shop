@@ -6,48 +6,49 @@
   Guevarra, Shane Ashley M. 
   Saturno, M-Jey L.
 
-  The Other Souce Codes has File Extension in .jsx 
+  The Other Source Codes has File Extension in .jsx 
 
   Working deployment site:
   https://tool-and-die-shop.vercel.app/
-  
+
 */
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./CSS/Login.css";
 
 const Login = () => {
+  // Variable Fields
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  //This Function handles the login function
   const handleLogin = () => {
     let isAdminLogin = false; // Initialize isAdminLogin flag
 
-     // Check if the username and password fields contain 'admin'
+    // Check if the username and password fields contain 'admin'
     if (username === "admin" && password === "admin") {
-      navigate("/inventory")
-    }else{
-          // Perform authentication logic here
-    // For demonstration, assume authentication is successful if username and password are 'admin'
-    for (var i = 0; i < localStorage.length; i++) {
-      if (
-        localStorage.key(i) == username &&
-        localStorage.getItem(localStorage.key(i)) == password
-      ) {
-        localStorage.setItem('username', username)
-        alert("login successful");
-        setIsLoggedIn(true);
-        setAdminLogin = true; // Set isAdminLogin to true if username and password are 'admin'
-        break;
+      navigate("/inventory");
+    } else {
+      // Perform authentication logic here
+      // For demonstration, assume authentication is successful if username and password are 'admin'
+      for (var i = 0; i < localStorage.length; i++) {
+        if (
+          localStorage.key(i) == username &&
+          localStorage.getItem(localStorage.key(i)) == password
+        ) {
+          localStorage.setItem("username", username);
+          alert("login successful");
+          setIsLoggedIn(true);
+          setAdminLogin = true; // Set isAdminLogin to true if username and password are 'admin'
+          break;
+        }
       }
-    }
 
-    if (!isLoggedIn) {
-      alert("login failed");
-    }
-
+      if (!isLoggedIn) {
+        alert("login failed");
+      }
     }
   };
 

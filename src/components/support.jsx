@@ -6,7 +6,7 @@
   Guevarra, Shane Ashley M. 
   Saturno, M-Jey L.
 
-  The Other Souce Codes has File Extension in .jsx 
+  The Other Source Codes has File Extension in .jsx 
 
   Working deployment site:
   https://tool-and-die-shop.vercel.app/
@@ -18,11 +18,36 @@ import { Link } from "react-router-dom";
 import "./CSS/support.css";
 
 function Support() {
-  const [activeButton, setActiveButton] = useState("Account");
+  const [activeButton, setActiveButton] = useState("Orders");
   const [notifications, setNotifications] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [username, setUsername] = useState("");
   const [onDelivery, setOnDelivery] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState('');
+
+  const handleAsk = (question) => {
+    let fetchedAnswer = '';
+
+    switch (question.toLowerCase()) {
+      case 'return policy':
+        fetchedAnswer = 'Our return policy allows you to return items within 30 days of purchase.';
+        break;
+      case 'contact customer support':
+        fetchedAnswer = 'You can contact our customer support team at toolndieshop@gmail.com or by calling 1-800-123-4567.';
+        break;
+      case 'custom orders':
+        fetchedAnswer = 'Yes we can accept custom orders. Custom orders are sent thru Email: toolndieshop@gmail.com';
+        break;
+      case '':
+        break;
+      default:
+        fetchedAnswer = 'Sorry, I don\'t have an answer for that question. Please try another question.';
+        break;
+    }
+
+    setAnswer(fetchedAnswer);
+  };
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -119,7 +144,24 @@ function Support() {
           </div>
         );
       case "Help Center":
-        return <div className="help-text-det">Customer Help</div>;
+        return (
+          <div>
+            <div className="help-text-det">Customer Help</div>;
+            <div className="buttons-container">
+              <button className="btn-faq" onClick={() => handleAsk("return policy")}>
+                What is your return policy?
+              </button>
+              <button className="btn-faq" onClick={() => handleAsk("contact customer support")}>
+                How can I contact customer support?
+              </button>
+              <button className="btn-faq" onClick={() => handleAsk("custom orders")}>
+                Do you accept custom orders?
+              </button>
+              {/* Add more buttons for other frequently asked questions */}
+            </div>
+            <div className="answer-container">{answer && <p>{answer}</p>}</div>
+          </div>
+        );
       default:
         return null;
     }

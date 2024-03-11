@@ -6,7 +6,7 @@
   Guevarra, Shane Ashley M. 
   Saturno, M-Jey L.
 
-  The Other Souce Codes has File Extension in .jsx 
+  The Other Source Codes has File Extension in .jsx 
 
   Working deployment site:
   https://tool-and-die-shop.vercel.app/
@@ -24,6 +24,9 @@ export default function Inventory() {
   const [updatedItems, setUpdatedItems] = useState([]);
   const [totalSales, setTotalSales] = useState(0); // State to store total sales
 
+  /*Executes side effects after the component mounts, such as initializing indexedDB for storing inventory data 
+   *and setting up necessary database configurations.
+   */
   useEffect(() => {
     setMenuItems(menuData);
   }, []);
@@ -45,6 +48,8 @@ export default function Inventory() {
     };
   }, []);
 
+  /*Adds a new item to the indexedDB database, capturing input values for item name, quantity, and price, 
+  and updating the state with the newly added item upon successful addition. */
   const addItemToDatabase = () => {
     const name = document.querySelector('.item-name').value;
     const quantity = parseInt(document.querySelector('.item-quantity').value);
@@ -75,16 +80,21 @@ export default function Inventory() {
     };
   };
   
-  
+  //Sets the selected item for editing, allowing users to modify the details of a particular inventory item.
   const toField = (menuItem) => {
     setSelectedItem(menuItem);
   };
 
+  // Updates the state of the selected item based on user input, enabling dynamic modification of item 
+  // details such as name, quantity, and price.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedItem({ ...selectedItem, [name]: value });
   };
 
+  /* Updates the inventory item with the modified details, reflecting the changes in the UI 
+  and storing the updated item in the state and optionally making API calls for persisting the 
+  changes on the server. */
   const handleSave = () => {
     const updatedMenuItems = menuItems.map((item) =>
       item.id === selectedItem.id ? selectedItem : item
@@ -96,6 +106,8 @@ export default function Inventory() {
     setSelectedItem(null); // Reset selected item after saving
   };
 
+  // Adds a new item to the inventory, capturing input values for name, quantity, and price, 
+  //and updating the state with the newly added item upon successful addition.
   const handleSaveNew = () => {
     const name = document.querySelector('.item-name').value;
     const quantity = parseInt(document.querySelector('.item-quantity').value);

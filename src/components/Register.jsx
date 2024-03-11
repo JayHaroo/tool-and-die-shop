@@ -6,7 +6,7 @@
   Guevarra, Shane Ashley M. 
   Saturno, M-Jey L.
 
-  The Other Souce Codes has File Extension in .jsx 
+  The Other Source Codes has File Extension in .jsx 
 
   Working deployment site:
   https://tool-and-die-shop.vercel.app/
