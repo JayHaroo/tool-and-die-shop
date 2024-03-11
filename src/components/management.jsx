@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import employeesData from "./employees.json";
-import "./management.css";
+import "./CSS/management.css";
 
 export default function Management() {
   const [transactions, setTransactions] = useState([]);
@@ -33,13 +33,13 @@ export default function Management() {
     const transactionToConfirm = transactions.find(
       (transaction) => transaction.id === transactionId
     );
-  
+
     // Store confirmed delivery in a new IndexedDB
     const openRequest = indexedDB.open("deliveries_db", 1);
-  
+
     openRequest.onupgradeneeded = function (event) {
       const db = event.target.result;
-  
+
       // Create object store for deliveries
       if (!db.objectStoreNames.contains("deliveries")) {
         db.createObjectStore("deliveries", {
@@ -48,12 +48,12 @@ export default function Management() {
         });
       }
     };
-  
+
     openRequest.onsuccess = function (event) {
       const db = event.target.result;
       const transaction = db.transaction(["deliveries"], "readwrite");
       const objectStore = transaction.objectStore("deliveries");
-  
+
       // Add confirmed delivery to the object store
       const addRequest = objectStore.add({
         ...transactionToConfirm,
@@ -61,25 +61,86 @@ export default function Management() {
         deliveryDate: transactionToConfirm.deliveryDate, // Use the delivery date from the transaction object
         datePlaced: new Date().toLocaleString(), // Store the date placed for confirmed delivery
       });
-  
+
       addRequest.onsuccess = function () {
         // Remove confirmed transaction from transactions
         const updatedTransactions = transactions.filter(
           (transaction) => transaction.id !== transactionToConfirm.id
         );
         setTransactions(updatedTransactions);
-      
+
         // Update confirmed deliveries state
         setConfirmedDeliveries((prevDeliveries) => [
           ...prevDeliveries,
           {
             ...transactionToConfirm,
-            items: transactionToConfirm.boughtItems.map(item => item.name), // Map over each item in boughtItems array to extract name
+            items: transactionToConfirm.boughtItems.map((item) => item.name), // Map over each item in boughtItems array to extract name
             employee: selectedEmployee,
             deliveryDate: transactionToConfirm.deliveryDate, // Use the delivery date from the transaction object
             datePlaced: new Date().toLocaleString(), // Store the date placed for confirmed delivery
           },
         ]);
+      };
+    };
+  };
+
+  const handleCompleteDelivery = (deliveryId) => {
+    // Find the delivery to complete
+    const deliveryToComplete = confirmedDeliveries.find(
+      (delivery) => delivery.id === deliveryId
+    );
+
+    // Store completed delivery in a new IndexedDB
+    const openRequest = indexedDB.open("completed_deliveries_db", 1);
+
+    openRequest.onupgradeneeded = function (event) {
+      const db = event.target.result;
+
+      // Create object store for completed deliveries
+      if (!db.objectStoreNames.contains("completed_deliveries")) {
+        db.createObjectStore("completed_deliveries", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+    };
+
+    openRequest.onsuccess = function (event) {
+      const db = event.target.result;
+      const transaction = db.transaction(["completed_deliveries"], "readwrite");
+      const objectStore = transaction.objectStore("completed_deliveries");
+
+      // Add completed delivery to the object store
+      const addRequest = objectStore.add(deliveryToComplete);
+
+      addRequest.onsuccess = function () {
+        // Remove completed delivery from confirmed deliveries
+        const updatedDeliveries = confirmedDeliveries.filter(
+          (delivery) => delivery.id !== deliveryToComplete.id
+        );
+        setConfirmedDeliveries(updatedDeliveries);
+
+        // Remove completed delivery from deliveries_db
+        const deleteRequest = indexedDB.open("deliveries_db", 1);
+
+        deleteRequest.onsuccess = function (event) {
+          const db = event.target.result;
+          const transaction = db.transaction(["deliveries"], "readwrite");
+          const objectStore = transaction.objectStore("deliveries");
+
+          const deleteDBRequest = objectStore.delete(deliveryId);
+
+          deleteDBRequest.onsuccess = function () {
+            console.log("Delivery data removed from deliveries_db");
+          };
+
+          deleteDBRequest.onerror = function (event) {
+            console.error(
+              "Error removing delivery data from deliveries_db:",
+              event.target.error
+            );
+          };
+        };
       };
     };
   };
@@ -202,7 +263,11 @@ export default function Management() {
                 <td>{delivery.items.join(", ")}</td>
                 <td>${delivery.totalPrice.toFixed(2)}</td>
                 <td>{delivery.employee}</td>
-                <td><button> Click to complete Delivery</button></td>
+                <td>
+                  <button onClick={() => handleCompleteDelivery(delivery.id)}>
+                    Click to complete Delivery
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

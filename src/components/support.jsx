@@ -1,42 +1,110 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./support.css";
+import "./CSS/support.css";
 
 function Support() {
   const [activeButton, setActiveButton] = useState("Account");
   const [notifications, setNotifications] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [username, setUsername] = useState("");
+  const [onDelivery, setOnDelivery] = useState([]);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
     }
+
+    const openRequest2 = indexedDB.open("transactions_db", 1);
+    openRequest2.onsuccess = function (event) {
+      const db = event.target.rersult;
+      const transaction = db.transaction(["transactions"], "readonly");
+      const objectStore = transaction.objectStore("transactions");
+      const getAllRequest = objectStore.getAll();
+
+      getAllRequest.onsuccess = function (event) {
+        setTransactions(event.target.result);
+      };
+    };
+
+    const openRequest = indexedDB.open("deliveries_db", 1);
+
+    openRequest.onsuccess = function (event) {
+      const db = event.target.result;
+      const transaction = db.transaction(["deliveries"], "readonly");
+      const objectStore = transaction.objectStore("deliveries");
+
+      const getRequest = objectStore.getAll();
+
+      getRequest.onsuccess = function (event) {
+        const deliveries = event.target.result;
+        // Count the number of items on delivery
+        const onDeliveryCount = deliveries.filter(
+          (delivery) => delivery.status === "On delivery"
+        ).length;
+        // Update the notifications state with the count
+        setNotifications(onDeliveryCount);
+        // Update the onDelivery state with all delivery items
+        setOnDelivery(deliveries);
+      };
+
+      getRequest.onerror = function (event) {
+        console.error(
+          "Error fetching data from indexedDB:",
+          event.target.error
+        );
+      };
+    };
+
+    openRequest.onupgradeneeded = function (event) {
+      const db = event.target.result;
+      db.createObjectStore("deliveries", {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+    };
   }, []);
+
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
 
   const renderMiddlePanel = () => {
     switch (activeButton) {
-      case "Account":
-        return (
-          <div>
-            <div className="acc-text-det">Manage Account Details</div>
-          </div>
-        );
       case "Orders":
         return (
-          <div className="ord-text-det">Orders Panel Content</div>
-        );
-      case "Inbox":
-        return (
-          <div className="inb-text-det">Inbox Panel Content</div>
+          <div>
+            <div className="ord-text-det">Your Orders</div>
+            <table className="transaction-table">
+              <thead>
+                <tr>
+                  <th>Delivery Date</th>
+                  <th>Address</th>
+                  <th>Materials to Deliver</th>
+                  <th>Total Price</th>
+                  <th>Date Placed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((transaction) => (
+                  <tr key={transaction.id}>
+                    <td>{transaction.deliveryDate}</td>
+                    <td>{transaction.address}</td>
+                    <td>
+                      {transaction.boughtItems.map((item, index) => (
+                        <span key={index}>{item.name}, </span>
+                      ))}
+                    </td>
+                    <td>${transaction.totalPrice.toFixed(2)}</td>
+                    <td>{transaction.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         );
       case "Help Center":
-        return (
-          <div className="help-text-det">Help Panel Content</div>
-        );
+        return <div className="help-text-det">Customer Help</div>;
       default:
         return null;
     }
@@ -137,23 +205,12 @@ function Support() {
           <div className="sup-btn">
             <div className="name"> {username} </div>
             <button
-              className="acc-btn"
-              onClick={() => handleButtonClick("Account")}
-            >
-              Account
-            </button>
-            <button
               className="ord-btn"
               onClick={() => handleButtonClick("Orders")}
             >
               Orders
             </button>
-            <button
-              className="inb-btn"
-              onClick={() => handleButtonClick("Inbox")}
-            >
-              Inbox
-            </button>
+
             <button
               className="help-btn"
               onClick={() => handleButtonClick("Help Center")}
@@ -163,9 +220,51 @@ function Support() {
           </div>
         </div>
         <div className="middle-panel">{renderMiddlePanel()}</div>
+
         <div className="right-panel">
           <h1>Notifications</h1>
           <div className="l2"></div>
+          <div className="on-delivery">
+            {onDelivery.map((item) => (
+              <div key={item.id}>
+                <svg
+                  width="40px"
+                  height="40px"
+                  viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <g id="Layer_2" data-name="Layer 2">
+                      {" "}
+                      <g id="invisible_box" data-name="invisible box">
+                        {" "}
+                        <rect width="48" height="48" fill="none"></rect>{" "}
+                      </g>{" "}
+                      <g id="Layer_7" data-name="Layer 7">
+                        {" "}
+                        <g>
+                          {" "}
+                          <path d="M37.7,11.1A3,3,0,0,0,35.4,10H34.2l.3-1.7A3.1,3.1,0,0,0,33.9,6a3.2,3.2,0,0,0-2.2-1H7.9A2.1,2.1,0,0,0,5.8,6.7,2,2,0,0,0,7.8,9h7.3A3,3,0,0,1,18,12.5L15.6,26.3a3,3,0,0,1-2.9,2.5H4.8a2,2,0,0,0-2,1.6L2,34.7A2.8,2.8,0,0,0,2.7,37a2.8,2.8,0,0,0,2.1,1H7.3a7,7,0,0,0,13.4,0h4.6a7,7,0,0,0,13.4,0h2a3.2,3.2,0,0,0,3.1-2.7L46,22.5ZM14,39a3,3,0,0,1-3-3,3,3,0,0,1,6,0A3,3,0,0,1,14,39Zm18,0a3,3,0,0,1-3-3,3,3,0,0,1,6,0A3,3,0,0,1,32,39Zm.1-17,1.4-8h1.3l5.9,8Z"></path>{" "}
+                          <path d="M4,15H14a2,2,0,0,0,0-4H4a2,2,0,0,0,0,4Z"></path>{" "}
+                          <path d="M15,19a2,2,0,0,0-2-2H5a2,2,0,0,0,0,4h8A2,2,0,0,0,15,19Z"></path>{" "}
+                          <path d="M6,23a2,2,0,0,0,0,4h6a2,2,0,0,0,0-4Z"></path>{" "}
+                        </g>{" "}
+                      </g>{" "}
+                    </g>{" "}
+                  </g>
+                </svg>
+                <div className="on-d-text">Your order is on Delivery!</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

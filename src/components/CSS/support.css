@@ -89,3 +89,16 @@
 .container-2{
   display: flex;
 }
+
+.on-delivery{
+  display: flex;
+  margin-top: 10px;
+  color: black;
+  height: 50px;
+  width: 15.5rem;
+}
+
+.on-d-text{
+  margin-top: -1.9rem;
+  margin-left: 50px;
+}

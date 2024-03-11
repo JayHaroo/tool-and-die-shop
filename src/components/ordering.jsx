@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./ordering.css";
+import "./CSS/ordering.css";
 import menuData from "./menu.json";
 
 export default function Ordering() {

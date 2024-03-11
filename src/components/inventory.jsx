@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./inventory.css";
+import "./CSS/inventory.css";
 import { Link } from "react-router-dom";
 import menuData from "./menu.json";
 
